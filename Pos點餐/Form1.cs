@@ -7,13 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
-using CheckBox = System.Windows.Forms.CheckBox;
 
 namespace Pos點餐
 {
     public partial class Form1 : Form
     {
+
+        private List<FlowLayoutPanel> layoutPanels = new List<FlowLayoutPanel>();
         public Form1()
         {
             InitializeComponent();
@@ -22,60 +22,73 @@ namespace Pos點餐
             string[] drinks = { "紅茶$30", "綠茶$35", "奶茶$40", };
             string[] desserts = { "蘋果派$25", "甜甜圈$30", "冰淇淋$35" };
 
-            GenerateItemsUI(flowLayoutPanel1, mainDishes);
-            GenerateItemsUI(flowLayoutPanel2, subDishes);
-            GenerateItemsUI(flowLayoutPanel3, drinks);
-            GenerateItemsUI(flowLayoutPanel4, desserts);
-        }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            
-            int sum = 0;
-            // 雞排飯$90
-            // $ => [0] 雞排飯 [1] 90
+            //layoutPanels[0] = flowLayoutPanel1;
+            //layoutPanels[1] = flowLayoutPanel2;
+            //layoutPanels[2] = flowLayoutPanel3;
+            //layoutPanels[3] = flowLayoutPanel4;
+            string[][] dishes = { mainDishes, subDishes, drinks, desserts };
+            string[] categories = { "主餐", "附餐", "甜點", "飲料" };
 
-            sum += GetSum(flowLayoutPanel1);
-            sum += GetSum(flowLayoutPanel2);
-            sum += GetSum(flowLayoutPanel3);
-            sum += GetSum(flowLayoutPanel4);
-            priceLab.Text = sum.ToString();
-            //
-            //if (checkBox1.Checked) sum += 80;
-            //if (checkBox2.Checked) sum += 65;
-            //if (checkBox3.Checked) sum += 95;
-            //
-        }
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void GenerateItemsUI(FlowLayoutPanel flowLayoutPanel, string[] items)
-        {
-            foreach(string item in items)
+            for(int i = 0; i < categories.Length; i++)
             {
-                CheckBox checkBox = new CheckBox();
-                checkBox.Text = item;
-                flowLayoutPanel.Controls.Add(checkBox);
+                FlowLayoutPanel panelContainer = new FlowLayoutPanel();
+                FlowLayoutPanel panel = new FlowLayoutPanel();
+                Label lab = new Label();
+                lab.Text = categories[i];
+                
+
+                //lab.BorderStyle = BorderStyle.FixedSingle;
+                //panel.BorderStyle = BorderStyle.FixedSingle;
+                //panelContainer.BorderStyle = BorderStyle.FixedSingle;
+                panelContainer.Height = 300;
+                panel.Height = 300;
+                panelContainer.Controls.Add(lab);
+                panelContainer.Controls.Add(panel);
+                
+                container.Controls.Add(panelContainer);
+                layoutPanels.Add(panel);
             }
-        }
-
-        private int GetPrice(string text) => int.Parse(text.Split('$')[1]);
-
-        private int GetSum(FlowLayoutPanel flowLayoutPanel)
-        {
-            int sum = 0;
-            // 雞排飯$90
-            // $ => [0] 雞排飯 [1] 90
-
-            foreach (CheckBox checkBox in flowLayoutPanel.Controls)
+            
+            for(int i = 0; i < layoutPanels.Count; i++)
             {
-                if (checkBox.Checked)
-                    sum += GetPrice(checkBox.Text);
+                layoutPanels[i].GenerateItemsUI(dishes[i], CheckedChage, ValueChage);
             }
-            return sum;
+
+            
+
         }
+
+        public void CheckedChage(object sender,EventArgs e)
+        {
+            CheckBox checkBox = (CheckBox)sender;
+            NumericUpDown numericUpDown = checkBox.Tag as NumericUpDown;
+            numericUpDown.Value = checkBox.Checked == true ? 1 : 0;
+
+            
+            Item item = new Item(checkBox.Text, numericUpDown.Value);
+            Order.AddOrder(item);
+            recordContainer.Controls.Clear();
+            recordContainer.Controls.Add(Order.GeneratePanel());
+            priceLab.Text = Order.Total();
+
+        }
+
+        public void ValueChage(object sender, EventArgs e)
+        {
+            NumericUpDown numericUpDown = (NumericUpDown)sender;
+            CheckBox checkBox = numericUpDown.Tag as CheckBox;
+            checkBox.Checked = numericUpDown.Value > 0 ;
+
+            Item item = new Item(checkBox.Text, numericUpDown.Value);
+            Order.AddOrder(item);
+            recordContainer.Controls.Clear();
+            recordContainer.Controls.Add(Order.GeneratePanel());
+            priceLab.Text = Order.Total();
+
+        }
+
+
 
     }
 }
