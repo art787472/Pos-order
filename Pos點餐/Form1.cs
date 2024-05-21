@@ -65,6 +65,7 @@ namespace Pos點餐
             recordContainer.Controls.Clear();
             recordContainer.Controls.Add(args.Item1);
             priceLab.Text = args.Item2;
+
         }
 
         public void CheckedChage(object sender,EventArgs e)
@@ -72,11 +73,9 @@ namespace Pos點餐
             CheckBox checkBox = (CheckBox)sender;
             NumericUpDown numericUpDown = checkBox.Tag as NumericUpDown;
             numericUpDown.Value = checkBox.Checked == true ? 1 : 0;
-
             
             Item item = new Item(checkBox.Text, numericUpDown.Value);
-            Order.AddOrder(item);
-            
+            Order.AddOrder(item, comboBox1.Text);
 
         }
 
@@ -87,12 +86,13 @@ namespace Pos點餐
             checkBox.Checked = numericUpDown.Value > 0 ;
 
             Item item = new Item(checkBox.Text, numericUpDown.Value);
-            Order.AddOrder(item);
-            
+            Order.AddOrder(item, comboBox1.Text);
 
         }
 
-
-
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            
+        }
     }
 }
