@@ -55,8 +55,16 @@ namespace Pos點餐
                 layoutPanels[i].GenerateItemsUI(dishes[i], CheckedChage, ValueChage);
             }
 
-            
+            // Register event
+            EventHandlers.panelHandler += EventHandlerOnpanelHandler;
 
+        }
+
+        private void EventHandlerOnpanelHandler(object sender, (FlowLayoutPanel, string) args)
+        {
+            recordContainer.Controls.Clear();
+            recordContainer.Controls.Add(args.Item1);
+            priceLab.Text = args.Item2;
         }
 
         public void CheckedChage(object sender,EventArgs e)
@@ -68,9 +76,7 @@ namespace Pos點餐
             
             Item item = new Item(checkBox.Text, numericUpDown.Value);
             Order.AddOrder(item);
-            recordContainer.Controls.Clear();
-            recordContainer.Controls.Add(Order.GeneratePanel());
-            priceLab.Text = Order.Total();
+            
 
         }
 
@@ -82,9 +88,7 @@ namespace Pos點餐
 
             Item item = new Item(checkBox.Text, numericUpDown.Value);
             Order.AddOrder(item);
-            recordContainer.Controls.Clear();
-            recordContainer.Controls.Add(Order.GeneratePanel());
-            priceLab.Text = Order.Total();
+            
 
         }
 
