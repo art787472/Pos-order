@@ -16,25 +16,27 @@ namespace Pos點餐
             bool hasItem = items.Any(x => x.name == item.name);
             Item product = items.FirstOrDefault(x => x.name == item.name);
             FlowLayoutPanel panel = new FlowLayoutPanel();
+            
+
             // 新增:
             if (!hasItem && item.number > 0)
             {
                 items.Add(item);
-                Discount.computeDiscount(items, discountOpt);
+                Discount.GenerateDiscount(items, discountOpt);
                 return;
             }
             // 刪除:
             if(item.number == 0)
             {
                 items.Remove(product);
-                Discount.computeDiscount(items, discountOpt);
+                Discount.GenerateDiscount(items, discountOpt);
                 return;
             }
             
             // 修改:
             product.number = item.number;
             product.sum = item.sum;
-            Discount.computeDiscount(items, discountOpt);
+            Discount.GenerateDiscount(items, discountOpt);
         }
 
 
