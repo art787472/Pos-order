@@ -71,15 +71,6 @@
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
-            "雞排飯買2送1",
-            "雞排飯三個250",
-            "豬排飯搭配紅茶110",
-            "魚排飯搭配綠茶100",
-            "買炒飯贈送冰淇淋",
-            "魚排飯贈送蘋果派",
-            "全部品項打9折",
-            "豬排飯三個打85折"});
             this.comboBox1.Location = new System.Drawing.Point(489, 553);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(117, 20);

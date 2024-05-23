@@ -58,6 +58,24 @@ namespace Pos點餐
             // Register event
             EventHandlers.panelHandler += EventHandlerOnpanelHandler;
 
+            List<KeyValueModel> list = new List<KeyValueModel>()
+            {
+                (new KeyValueModel("雞排飯買2送1","Pos點餐.ChickenBuyTwoGetOneFreeDiscount")),
+                (new KeyValueModel("雞排飯三個250","Pos點餐.ChickenThreeDiscount")),
+                (new KeyValueModel("豬排飯搭配紅茶110","Pos點餐.PorkSetDiscount")),
+                (new KeyValueModel("魚排飯搭配綠茶100","Pos點餐.FishSetDiscount")),
+                (new KeyValueModel("買炒飯贈送冰淇淋","Pos點餐.FriedRiceIceCreamFreeDiscount")),
+                (new KeyValueModel("魚排飯贈送蘋果派","Pos點餐.FishRiceApplePieFreeDiscount")),
+                (new KeyValueModel("全部品項打9折","Pos點餐.All10_offDiscount")),
+                (new KeyValueModel("豬排飯三個打85折","Pos點餐.ThreePorkRice15_offDiscount")),
+            };
+
+            comboBox1.DataSource = list;
+            comboBox1.DisplayMember = "Key";
+            comboBox1.ValueMember = "Value";
+
+
+
         }
 
         private void EventHandlerOnpanelHandler(object sender, (FlowLayoutPanel, string) args)
@@ -75,7 +93,7 @@ namespace Pos點餐
             numericUpDown.Value = checkBox.Checked == true ? 1 : 0;
             
             Item item = new Item(checkBox.Text, numericUpDown.Value);
-            Order.AddOrder(item, comboBox1.Text);
+            Order.AddOrder(item, comboBox1.SelectedValue.ToString());
 
         }
 
@@ -86,7 +104,7 @@ namespace Pos點餐
             checkBox.Checked = numericUpDown.Value > 0 ;
 
             Item item = new Item(checkBox.Text, numericUpDown.Value);
-            Order.AddOrder(item, comboBox1.Text);
+            Order.AddOrder(item, comboBox1.SelectedValue.ToString());
 
         }
 
