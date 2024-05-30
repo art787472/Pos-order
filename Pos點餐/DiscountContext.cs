@@ -16,9 +16,11 @@ namespace Pos點餐
             this.discount = (ADiscount)Activator.CreateInstance(t);
         }
 
-        public List<Item> GetResult(List<Item> items)
+        public void GenerateDiscount(List<Item> items)
         {
-            return this.discount.ComputeDiscount(items);
+            items.RemoveAll(x => x.name.Contains("贈送") || x.name.Contains("折扣"));
+            items = this.discount.ComputeDiscount(items);
+            ShowPanel.GeneratePanel(items);
         }
     }
 }

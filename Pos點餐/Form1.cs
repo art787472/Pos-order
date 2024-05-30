@@ -1,12 +1,16 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Pos點餐.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static Pos點餐.Models.POSModel;
 
 namespace Pos點餐
 {
@@ -17,43 +21,43 @@ namespace Pos點餐
         public Form1()
         {
             InitializeComponent();
-            string[] mainDishes = { "雞排飯$90", "豬排飯$85", "魚排飯$75", "炒飯$100" };
-            string[] subDishes = { "薯條$30", "雞塊$30", "濃湯$30", "蘋果派$30" };
-            string[] drinks = { "紅茶$30", "綠茶$35", "奶茶$40", };
-            string[] desserts = { "蘋果派$25", "甜甜圈$30", "冰淇淋$35" };
+            //string[] mainDishes = { "雞排飯$90", "豬排飯$85", "魚排飯$75", "炒飯$100" };
+            //string[] subDishes = { "薯條$30", "雞塊$30", "濃湯$30", "蘋果派$30" };
+            //string[] drinks = { "紅茶$30", "綠茶$35", "奶茶$40", };
+            //string[] desserts = { "蘋果派$25", "甜甜圈$30", "冰淇淋$35" };
 
 
             //layoutPanels[0] = flowLayoutPanel1;
             //layoutPanels[1] = flowLayoutPanel2;
             //layoutPanels[2] = flowLayoutPanel3;
             //layoutPanels[3] = flowLayoutPanel4;
-            string[][] dishes = { mainDishes, subDishes, drinks, desserts };
-            string[] categories = { "主餐", "附餐", "甜點", "飲料" };
+            //string[][] dishes = { mainDishes, subDishes, drinks, desserts };
+            //string[] categories = { "主餐", "附餐", "甜點", "飲料" };
 
-            for(int i = 0; i < categories.Length; i++)
-            {
-                FlowLayoutPanel panelContainer = new FlowLayoutPanel();
-                FlowLayoutPanel panel = new FlowLayoutPanel();
-                Label lab = new Label();
-                lab.Text = categories[i];
+            //for(int i = 0; i < categories.Length; i++)
+            //{
+            //    FlowLayoutPanel panelContainer = new FlowLayoutPanel();
+            //    FlowLayoutPanel panel = new FlowLayoutPanel();
+            //    Label lab = new Label();
+            //    lab.Text = categories[i];
                 
 
-                //lab.BorderStyle = BorderStyle.FixedSingle;
-                //panel.BorderStyle = BorderStyle.FixedSingle;
-                //panelContainer.BorderStyle = BorderStyle.FixedSingle;
-                panelContainer.Height = 300;
-                panel.Height = 300;
-                panelContainer.Controls.Add(lab);
-                panelContainer.Controls.Add(panel);
+            //    //lab.BorderStyle = BorderStyle.FixedSingle;
+            //    //panel.BorderStyle = BorderStyle.FixedSingle;
+            //    //panelContainer.BorderStyle = BorderStyle.FixedSingle;
+            //    panelContainer.Height = 300;
+            //    panel.Height = 300;
+            //    panelContainer.Controls.Add(lab);
+            //    panelContainer.Controls.Add(panel);
                 
-                container.Controls.Add(panelContainer);
-                layoutPanels.Add(panel);
-            }
+            //    container.Controls.Add(panelContainer);
+            //    layoutPanels.Add(panel);
+            //}
             
-            for(int i = 0; i < layoutPanels.Count; i++)
-            {
-                layoutPanels[i].GenerateItemsUI(dishes[i], CheckedChage, ValueChage);
-            }
+            //for(int i = 0; i < layoutPanels.Count; i++)
+            //{
+            //    layoutPanels[i].GenerateItemsUI(dishes[i], CheckedChage, ValueChage);
+            //}
 
             // Register event
             EventHandlers.panelHandler += EventHandlerOnpanelHandler;
@@ -110,9 +114,54 @@ namespace Pos點餐
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            //HW1:讀取json file => JsonCovert 套件
+            //Hw2:動態生成所有品項
+            TextReader textRdr = File.OpenText(@"../../../pos.json");
             
+            JsonReader jsonReader = new JsonTextReader(textRdr);
+            POSModel res = JsonConvert.DeserializeObject<POSModel>(textRdr.ReadToEnd());
+            List<string> categories = res.foods.Select(x => x.category).ToList();
+
+
+
+            foreach (var c in categories)
+            {
+                FlowLayoutPanel panelContainer = new FlowLayoutPanel();
+                FlowLayoutPanel panel = new FlowLayoutPanel();
+                Label lab = new Label();
+                lab.Text = c;
+
+
+                //lab.BorderStyle = BorderStyle.FixedSingle;
+                //panel.BorderStyle = BorderStyle.FixedSingle;
+                //panelContainer.BorderStyle = BorderStyle.FixedSingle;
+                panelContainer.Height = 300;
+                panel.Height = 300;
+                panelContainer.Controls.Add(lab);
+                panelContainer.Controls.Add(panel);
+
+                string[] items = res.foods.FirstOrDefault(x => x.category == c).foods.Select(x => $"{x.name}${x.price}").ToArray();
+
+                panel.GenerateItemsUI(items, CheckedChage, ValueChage);
+
+                container.Controls.Add(panelContainer);
+                layoutPanels.Add(panel);
+            }
+
+
+
+
+
         }
 
-        
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(!(comboBox1.SelectedValue is string))
+                return;
+
+            Order.UpdateDiscount(comboBox1.SelectedValue.ToString());
+
+
+        }
     }
 }
