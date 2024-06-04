@@ -11,6 +11,20 @@ namespace Pos點餐.Models
         public Food[] foods { get; set; }
         public Discount discount { get; set; }
 
+
+        public class Food
+        {
+            public string category { get; set; }
+            public Dish[] foods { get; set; }
+        }
+
+        public class Dish
+        {
+            public string name { get; set; }
+            public int price { get; set; }
+        }
+
+
         public class Discount
         {
             public Strategy[] strategies { get; set; }
@@ -18,11 +32,12 @@ namespace Pos點餐.Models
 
         public class Strategy
         {
+            public string name { get; set; }
             public string strategy { get; set; }
             public Setitems setItems { get; set; }
             public Multiplediscount multipleDiscount { get; set; }
             public Freeitem freeItem { get; set; }
-            public Discount2 discount { get; set; }
+            
         }
 
         public class Setitems
@@ -52,23 +67,7 @@ namespace Pos點餐.Models
             public string item2 { get; set; }
         }
 
-        public class Discount2
-        {
-            public int percentage { get; set; }
-            public int price { get; set; }
-        }
-
-        public class Food
-        {
-            public string category { get; set; }
-            public Food1[] foods { get; set; }
-        }
-
-        public class Food1
-        {
-            public string name { get; set; }
-            public int price { get; set; }
-        }
+        
 
     }
 }

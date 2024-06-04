@@ -1,22 +1,24 @@
-﻿using System;
+﻿using Newtonsoft.Json.Serialization;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static Pos點餐.Models.POSModel;
 
 namespace Pos點餐
 {
     internal class Order
     {
         private static List<Item> items = new List<Item> ();
-        public static void AddOrder(Item item, string discountOpt)
+        public static void AddOrder(Strategy strategy, Item item)
         {
             bool hasItem = items.Any(x => x.name == item.name);
             Item product = items.FirstOrDefault(x => x.name == item.name);
             FlowLayoutPanel panel = new FlowLayoutPanel();
-            DiscountContext discountCtx = new DiscountContext(discountOpt);
+            DiscountContext discountCtx = new DiscountContext(strategy);
             
 
             // 新增:
@@ -40,9 +42,9 @@ namespace Pos點餐
             discountCtx.GenerateDiscount(items);
         }
 
-        public static void UpdateDiscount(string discountOpt)
+        public static void UpdateDiscount(Strategy strategy)
         {
-            DiscountContext discountCtx = new DiscountContext(discountOpt);
+            DiscountContext discountCtx = new DiscountContext(strategy);
             discountCtx.GenerateDiscount(items);
         }
 
