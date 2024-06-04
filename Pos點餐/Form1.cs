@@ -129,28 +129,6 @@ namespace Pos點餐
 
         }
 
-        private string GetStrategyName(Strategy strategy)
-        {
-            Multiplediscount multipleDiscount = strategy.multipleDiscount;
-            Freeitem freeitem = strategy.freeItem;
-            Setitems setitems = strategy.setItems;
-            
-            
-            switch (strategy.strategy)
-            {
-                case "Pos點餐.Discount.BuyMgetNFree":
-                    return $"{multipleDiscount.item}買{multipleDiscount.amount}送{multipleDiscount.discount.free}";
-                case "Pos點餐.Discount.FreeDiscount":
-                    return $"買{freeitem.item1}送{freeitem.item2}";
-                case "Pos點餐.Discount.MultipleFoodsDiscount":
-                    return $"{multipleDiscount.item}買{multipleDiscount.amount}件{multipleDiscount.discount.price}";
-                case "Pos點餐.Discount.PriceDiscount":
-                    if (multipleDiscount.item == "") return $"全部品項打{(1 - multipleDiscount.discount.percentage) * 100}折";
-                    return $"{multipleDiscount.item}買{multipleDiscount.amount}打{(1 - multipleDiscount.discount.percentage) * 100}折";
-                case "Pos點餐.Discount.SetDishDiscount":
-                    return $"{setitems.item1}搭配{setitems.item2}{setitems.price}";
-            }
-            return "";
-        }
+        
     }
 }

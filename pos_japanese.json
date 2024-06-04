@@ -254,6 +254,28 @@
           "item1": "",
           "item2": ""
         }
+      },
+      {
+        "name": "壽司搭配抹茶拿鐵打85折",
+        "strategy": "Pos點餐.Discount.SetDishPercentageDiscount",
+        "setItems": {
+          "item1": "壽司",
+          "item2": "抹茶拿鐵",
+          "price": 0
+        },
+        "multipleDiscount": {
+          "item": "",
+          "amount": 0,
+          "discount": {
+            "percentage": 0.15,
+            "price": 0,
+            "free": 0
+          }
+        },
+        "freeItem": {
+          "item1": "",
+          "item2": ""
+        }
       }
     ]
   }
